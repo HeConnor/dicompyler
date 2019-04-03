@@ -11,7 +11,8 @@
 import logging
 logger = logging.getLogger('dicompyler.quickimport')
 import wx
-from wx.lib.pubsub import pub
+# from wx.lib.pubsub import pub
+from pubsub import pub
 from dicompylercore import dicomparser
 from dicompyler import util
 

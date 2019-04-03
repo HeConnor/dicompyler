@@ -9,10 +9,11 @@
 
 import logging
 logger = logging.getLogger('dicompyler.plugin')
-import imp, os
+import os,imp
 import wx
 from wx.xrc import *
-from wx.lib.pubsub import pub
+# from wx.lib.pubsub import pub
+from pubsub import pub
 from dicompyler import guiutil, util
 
 def import_plugins(userpath=None):
@@ -40,8 +41,9 @@ def import_plugins(userpath=None):
                 # only try to import the module once
                 modules.append(module)
                 try:
+                    # spec = importlib.util.find_spec(module)
                     f, filename, description = \
-                            imp.find_module(module, [userpath, basepath])
+                                                    imp.find_module(module, [userpath, basepath])
                 except ImportError:
                     # Not able to find module so pass
                     pass
@@ -49,6 +51,7 @@ def import_plugins(userpath=None):
                     # Try to import the module if no exception occurred
                     try:
                         m = imp.load_module(module, f, filename, description)
+                        # module = importlib.util.module_from_spec(spec)
                     except ImportError:
                         logger.exception("%s could not be loaded", module)
                     else:
@@ -56,9 +59,55 @@ def import_plugins(userpath=None):
                                         'location': p['location']})
                         logger.debug("%s loaded", module)
                     # If the module is a single file, close it
-                    if not (description[2] == imp.PKG_DIRECTORY):
-                        f.close()
+                    # if not (description[2] == imp.PKG_DIRECTORY):
+                    #     f.close()
     return plugins
+
+
+# def import_plugins(userpath=None):
+#     """Find and import available plugins."""
+#
+#     # Get the base plugin path
+#     basepath = util.GetBasePluginsPath('')
+#     # Get the user plugin path if it has not been set
+#     if (userpath == None):
+#         datapath = guiutil.get_data_dir()
+#         userpath = os.path.join(datapath, 'plugins')
+#     # Get the list of possible plugins from both paths
+#     possibleplugins = []
+#     for i in os.listdir(userpath):
+#         possibleplugins.append({'plugin': i, 'location': 'user'})
+#     for i in os.listdir(basepath):
+#         possibleplugins.append({'plugin': i, 'location': 'base'})
+#
+#     modules = []
+#     plugins = []
+#     for p in possibleplugins:
+#         module = p['plugin'].split('.')[0]
+#         if module not in modules:
+#             if not ((module == "__init__") or (module == "")):
+#                 # only try to import the module once
+#                 modules.append(module)
+#                 try:
+#                     f, filename, description = \
+#                             imp.find_module(module, [userpath, basepath])
+#                 except ImportError:
+#                     # Not able to find module so pass
+#                     pass
+#                 else:
+#                     # Try to import the module if no exception occurred
+#                     try:
+#                         m = imp.load_module(module, f, filename, description)
+#                     except ImportError:
+#                         logger.exception("%s could not be loaded", module)
+#                     else:
+#                         plugins.append({'plugin': m,
+#                                         'location': p['location']})
+#                         logger.debug("%s loaded", module)
+#                     # If the module is a single file, close it
+#                     if not (description[2] == imp.PKG_DIRECTORY):
+#                         f.close()
+#     return plugins
 
 def PluginManager(parent, plugins, pluginsDisabled):
     """Prepare to show the plugin manager dialog."""

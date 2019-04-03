@@ -35,7 +35,7 @@
               <object class="sizeritem">
                 <object class="wxCheckBox" name="checkSearchSubfolders">
                   <label>Search within Subfolders</label>
-                  <checked>1</checked>
+                  <checked>0</checked>
                 </object>
               </object>
             </object>

@@ -8,7 +8,7 @@
 #    available at https://github.com/bastula/dicompyler/
 
 from __future__ import with_statement
-import imp, os, sys
+import _imp, os, sys
 import subprocess
 
 def platform():
@@ -38,7 +38,7 @@ def GetBasePluginsPath(resource):
 def main_is_frozen():
    return (hasattr(sys, "frozen") or # new py2exe
            hasattr(sys, "importers") # old py2exe
-           or imp.is_frozen("__main__")) # tools/freeze
+           or _imp.is_frozen("__main__")) # tools/freeze
 
 def get_main_dir():
     if main_is_frozen():

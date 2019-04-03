@@ -15,7 +15,8 @@ logger = logging.getLogger('dicompyler.dicomgui')
 import hashlib, os, threading
 import wx
 from wx.xrc import *
-from wx.lib.pubsub import pub
+# from wx.lib.pubsub import pub
+from pubsub import pub
 import numpy as np
 from dicompylercore import dicomparser
 from dicompyler import guiutil, util
@@ -117,7 +118,8 @@ class DicomImporterDialog(wx.Dialog):
         pub.sendMessage('preferences.requested.values', msg='general.dicom')
 
         # Search subfolders by default
-        self.import_search_subfolders = True
+        # self.import_search_subfolders = True
+        self.import_search_subfolders = False
 
         # Set the threading termination status to false intially
         self.terminate = False

@@ -10,7 +10,8 @@
 import os
 import wx
 from wx.xrc import *
-from wx.lib.pubsub import pub
+# from wx.lib.pubsub import pub
+from pubsub import pub
 from dicompyler import guiutil, util
 
 try:

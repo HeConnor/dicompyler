@@ -10,8 +10,10 @@
 
 import wx
 from wx.xrc import XmlResource, XRCCTRL, XRCID
-from wx.lib.pubsub import pub
-from matplotlib import _cntr as cntr
+# from wx.lib.pubsub import pub
+from pubsub import pub
+# from matplotlib import _cntr as cntr
+import skimage
 from matplotlib import __version__ as mplversion
 import numpy as np
 from dicompyler import guiutil, util
@@ -451,7 +453,8 @@ class plugin2DView(wx.Panel):
                     x, y = np.meshgrid(
                         np.arange(grid.shape[1]), np.arange(grid.shape[0]))
                     # Instantiate the isodose generator for this slice
-                    isodosegen = cntr.Cntr(x, y, grid)
+                    # isodosegen = cntr.Cntr(x, y, grid)
+                    isodosegen = skimage.measure.find_contours(np.array([x,y]),grid)
                     for id, isodose in iter(sorted(self.isodoses.items())):
                         self.DrawIsodose(isodose, gc, isodosegen)
 
@@ -674,7 +677,8 @@ class plugin2DView(wx.Panel):
             # Custom cursors with > 2 colors only works on Windows currently
             if guiutil.IsMSWindows():
                 image = wx.Image(util.GetResourcePath('contrast_high.png'))
-                self.SetCursor(wx.CursorFromImage(image))
+                self.SetCursor(wx.Cursor(image))
+                # self.SetCursor(wx.CursorFromImage(image))
         # Update the positon and values of the mouse cursor
         self.mousepos = evt.GetPosition()
         self.OnUpdatePositionValues(evt)
